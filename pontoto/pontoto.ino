@@ -36,6 +36,7 @@ Keypad myKeypad = Keypad( makeKeymap(keys), rowPins, colPins, 4, 4);
 char buffer_matricula[5];
 int cnt_buffer_matricula = 0;
 void imprimeHorario(void);
+void menu1(void);
 
 //pontos
 Ponto* pontos;
@@ -53,6 +54,9 @@ void setup() {
   lcd.begin(16, 4);
 }
 
+void menu1() {
+  lcd.clear();
+}
 
 uint32_t agora() {
   DateTime now = rtc.now(); 
@@ -64,21 +68,24 @@ void imprimeHorario() {
   
   uint8_t hour = now.hour();
   uint8_t minute = now.minute();
+  lcd.setCursor(0, 0);
   if(hour >= 6 && hour <= 11 && minute <= 59) {
-    lcd.print("   Bom dia");
+    lcd.print("Bom dia!");
   } else if(hour >= 12 && hour <= 19 && minute <= 59) {
-    lcd.print("   Boa tarde!");
-  } else if() {
+    lcd.print("Boa tarde!");
+  } else {
+    lcd.print("Boa noite!");
+  }
   
-  lcd.setCursor(1, 1);
+  lcd.setCursor(0, 1);
   lcd.print("Horario:");
-  lcd.setCursor(1, 2);
+  lcd.setCursor(0, 2);
   lcd.print(now.day());
   lcd.print('/');
   lcd.print(now.month());
   lcd.print('/');  
   lcd.print(now.year());
-  lcd.setCursor(1, 3);
+  lcd.setCursor(0, 3);
   lcd.print(now.hour());
   lcd.print(':');
   lcd.print(now.minute());
@@ -148,6 +155,26 @@ void leTeclado() {
   if (myKey != NULL) {
     Serial.println("Nova tecla:");
     Serial.println(myKey);
+    switch(myKey) {
+      case 'a':
+        menu1();
+        break;
+      case 'b':
+        lcd.clear();
+        lcd.print("apertou b");
+        break;
+      case 'c':
+        lcd.clear();
+        lcd.print("apertou c");
+        break;
+      case 'd':
+        lcd.clear();
+        lcd.print("apertou d");
+        break;
+      default:
+        lcd.clear();
+        lcd.print("aperta certo essa buceta");
+    }
     if(cnt_buffer_matricula < 4 && myKey != 'c') {
       buffer_matricula[cnt_buffer_matricula] = myKey;
       cnt_buffer_matricula++;
@@ -161,16 +188,6 @@ void leTeclado() {
     }
   }
 }
-
-char lerTeclado(){
-  char myKey = myKeypad.getKey();
-  if(myKey != NULL){
-    return myKey;  
-  } else {
-    return ' ';
-  }
-}
-
 
 void recuperaPontos() {
 
@@ -231,7 +248,7 @@ void configTime() {
 }
 
 void imprimePontos() {
-    Serial.println("---- LOG ----");
+  Serial.println("---- LOG ----");
   if(cnt_pontos > 0) {
     Ponto *proximo = pontos;
     int registros = 1;
@@ -261,29 +278,6 @@ void imprimePontos() {
 
 void loop() {
   imprimeHorario();
-//  char opcao = lerTeclado();
-//  switch(opcao) {
-//    case 'a':
-//      lcd.clear();
-//      lcd.print("apertou a");
-//      break;
-//    case 'b':
-//      lcd.clear();
-//      lcd.print("apertou b");
-//      break;
-//    case 'c':
-//      lcd.clear();
-//      lcd.print("apertou c");
-//      break;
-//    case 'd':
-//      lcd.clear();
-//      lcd.print("apertou d");
-//      break;
-//    default:
-//      lcd.clear();
-//      lcd.print("aperta certo essa buceta");
-//      lerTeclado();
-//  }
   while (Serial.available() > 0) {
     char digito = Serial.read();
     if(digito == 'c') {
