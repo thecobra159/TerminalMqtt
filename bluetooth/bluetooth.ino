@@ -67,7 +67,7 @@ void setup() {
   pinMode(LED, OUTPUT);
  
   // Create the BLE Device
-  BLEDevice::init("ESP32 - Terminal"); // Give it a name
+  BLEDevice::init("ESP32 - Terminal - Hans"); // Give it a name
  
   // Configura o dispositivo como Servidor BLE
   BLEServer *pServer = BLEDevice::createServer();
@@ -103,8 +103,12 @@ void setup() {
 void loop() {
   if (deviceConnected) {
     Serial.println("Conectado");
+
+    pCharacteristic->setValue("teste");
      
     pCharacteristic->notify(); // Envia o valor para o aplicativo!
+    pCharacteristic->setValue("\n");
+    pCharacteristic->notify();
     Serial.print("*** Dado enviado: ***");
   }
   delay(1000);
